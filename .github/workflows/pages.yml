@@ -1,0 +1,42 @@
+name: Publish IPO Radar dashboard
+
+on:
+  workflow_dispatch:
+    inputs:
+      site_bundle:
+        description: Compressed public dashboard artifact from the private project
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Unpack dashboard
+        env:
+          SITE_BUNDLE: ${{ inputs.site_bundle }}
+        run: |
+          mkdir -p site
+          printf '%s' "$SITE_BUNDLE" | base64 -d | tar -xz -C site
+          test -f site/index.html
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4
