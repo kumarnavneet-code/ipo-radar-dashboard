@@ -1,0 +1,563 @@
+{
+  "type": "object",
+  "properties": {
+    "previewScope": {
+      "enum": [
+        "historical",
+        "current"
+      ]
+    },
+    "coverageNote": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "mode": {
+      "enum": [
+        "demo",
+        "curated",
+        "preview"
+      ]
+    },
+    "timezone": {
+      "const": "Asia/Kolkata"
+    },
+    "referenceAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "ipos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]{2,63}$"
+          },
+          "issuer": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "segment": {
+            "const": "mainboard"
+          },
+          "currency": {
+            "const": "INR"
+          },
+          "sector": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "business": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "promoters": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            },
+            "uniqueItems": true
+          },
+          "isDemo": {
+            "type": "boolean"
+          },
+          "verification": {
+            "enum": [
+              "demo",
+              "reviewed",
+              "unverified"
+            ]
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "sourceIds": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_-]{2,63}$"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]{2,63}$"
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "url": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "https-url"
+                },
+                "kind": {
+                  "enum": [
+                    "demo",
+                    "primary"
+                  ]
+                },
+                "observedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "id",
+                "label",
+                "url",
+                "kind",
+                "observedAt"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "priceBand": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "min": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "max": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              }
+            },
+            "required": [
+              "min",
+              "max"
+            ],
+            "additionalProperties": false
+          },
+          "lotSize": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "minimum": 1,
+            "maximum": 1000000000
+          },
+          "issueSizeCr": {
+            "type": [
+              "number",
+              "null"
+            ],
+            "minimum": 0
+          },
+          "composition": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "freshPercent": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "ofsPercent": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              }
+            },
+            "required": [
+              "freshPercent",
+              "ofsPercent"
+            ],
+            "additionalProperties": false
+          },
+          "timeline": {
+            "type": "object",
+            "properties": {
+              "opensAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "closesAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "allotmentExpectedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "listingExpectedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "allotmentPublishedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              },
+              "listedAt": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "opensAt",
+              "closesAt",
+              "allotmentExpectedAt",
+              "listingExpectedAt",
+              "allotmentPublishedAt",
+              "listedAt"
+            ],
+            "additionalProperties": false
+          },
+          "observations": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]{2,63}$"
+                },
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                },
+                "unit": {
+                  "enum": [
+                    "INR",
+                    "INR_cr",
+                    "percent",
+                    "multiple"
+                  ]
+                },
+                "period": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "sourceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]{2,63}$"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "observedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "key",
+                "label",
+                "value",
+                "unit",
+                "period",
+                "sourceIds",
+                "observedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": {
+                  "enum": [
+                    "fact",
+                    "analysis"
+                  ]
+                },
+                "text": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2000
+                },
+                "sourceIds": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_-]{2,63}$"
+                  },
+                  "minItems": 1,
+                  "uniqueItems": true
+                },
+                "observedAt": {
+                  "type": "string",
+                  "format": "date-time"
+                }
+              },
+              "required": [
+                "kind",
+                "text",
+                "sourceIds",
+                "observedAt"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "companyWebsite": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "https-url"
+          },
+          "documents": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "label": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "kind": {
+                  "enum": [
+                    "offer_document",
+                    "exchange_notice",
+                    "registrar"
+                  ]
+                },
+                "url": {
+                  "type": "string",
+                  "format": "https-url"
+                }
+              },
+              "required": [
+                "label",
+                "kind",
+                "url"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "timelinePrecision": {
+            "enum": [
+              "date",
+              "timestamp"
+            ]
+          },
+          "buzz": {
+            "type": "object",
+            "properties": {
+              "score": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "method": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "sourceIds": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1,
+                "uniqueItems": true
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            },
+            "required": [
+              "score",
+              "method",
+              "sourceIds",
+              "observedAt"
+            ],
+            "additionalProperties": false
+          },
+          "offerTerms": {
+            "type": "object",
+            "properties": {
+              "freshAmountCr": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "ofsAmountCr": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "ofsShares": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
+              },
+              "upperBand": {
+                "type": "number",
+                "minimum": 0
+              },
+              "ceilingCr": {
+                "type": "number",
+                "minimum": 0
+              },
+              "freshPercentAtCeiling": {
+                "type": "number",
+                "minimum": 0
+              },
+              "ofsPercentAtCeiling": {
+                "type": "number",
+                "minimum": 0
+              },
+              "basis": {
+                "type": "string",
+                "enum": [
+                  "calculated_upper_band_ceiling",
+                  "disclosed_aggregate_limits"
+                ]
+              },
+              "discountText": {
+                "type": "string",
+                "minLength": 1
+              },
+              "formula": {
+                "type": "string",
+                "minLength": 1
+              },
+              "finalProceeds": {
+                "type": "boolean",
+                "const": false
+              }
+            },
+            "additionalProperties": false,
+            "required": [
+              "freshAmountCr",
+              "ofsAmountCr",
+              "ofsShares",
+              "upperBand",
+              "ceilingCr",
+              "freshPercentAtCeiling",
+              "ofsPercentAtCeiling",
+              "basis",
+              "discountText",
+              "formula",
+              "finalProceeds"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "issuer",
+          "segment",
+          "currency",
+          "sector",
+          "business",
+          "promoters",
+          "isDemo",
+          "verification",
+          "updatedAt",
+          "sourceIds",
+          "sources",
+          "priceBand",
+          "lotSize",
+          "issueSizeCr",
+          "composition",
+          "timeline",
+          "observations",
+          "notes",
+          "companyWebsite",
+          "documents"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "datasetLabel": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "reviewedAt": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "mode",
+    "timezone",
+    "referenceAt",
+    "updatedAt",
+    "ipos"
+  ],
+  "additionalProperties": false,
+  "$schema": "https://json-schema.org/draft/2020-12/schema"
+}
