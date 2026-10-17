@@ -1,6 +1,7 @@
 # IPO Radar dashboard
 
-This public repository contains only the GitHub Pages deployment workflow.
-Dashboard HTML, CSS, JavaScript, and approved public feed snapshots are sent
-from the private IPO Radar project as a Pages deployment artifact. The server,
-admin portal, collectors, tests, local data, and uploads are not stored here.
+Public dashboard assets and approved discovery feed snapshots for IPO Radar.
+
+Open the dashboard: https://kumarnavneet-code.github.io/ipo-radar-dashboard/
+
+Collectors, source code, setup, workflows, tests and acquisition evidence remain in the private engine repository. Feed timestamps and source links are shown in the dashboard. Discovery coverage does not imply complete investment research.
