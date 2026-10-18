@@ -62,6 +62,13 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time"
+          },
+          "appliedAt": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date-time"
           }
         },
         "required": [
