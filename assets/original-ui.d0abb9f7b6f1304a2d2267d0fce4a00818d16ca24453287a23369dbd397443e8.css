@@ -64,3 +64,23 @@
 /* All research headings use the same text treatment, without an icon. */
 .carousel-slide>h4{color:#503692;font-size:14px;font-weight:800;letter-spacing:-.35px}.offer-slide>h4:before{content:none;display:none}.applied-hint{font-size:10px!important;line-height:1.4;color:var(--muted);margin:3px 0 10px}.share-scope{display:block;font-size:12px;margin:10px 0}.share-scope select{font-size:12px}.share-capture{background:var(--card);color:inherit}.share-capture .card-actions{display:none}.share-capture .carousel{overflow:hidden}.share-capture .carousel-dots{display:none}.share-capture .slide-counter{position:static;margin-left:auto}
 .promoter-background{margin-top:9px;font-size:10px}.promoter-background summary{font-weight:700;min-height:32px;cursor:pointer}.promoter-background p{font-size:10px;line-height:1.45}
+
+/* Stable research viewport: content and swipe position never change its height. */
+.carousel{height:280px;min-height:280px;max-height:280px}
+.financial-slide>h4{margin-bottom:10px}
+.financial-tile{padding:8px 0}
+.financial-heading h5{font-size:11px}
+.financial-pair dt{font-size:9px}
+.financial-pair dd{font-size:18px;margin:4px 0}
+.financial-slide p.financial-meaning{font-size:10px;line-height:1.35;margin:5px 0}
+.financial-slide p.financial-recent{font-size:9px}
+.offer-slide .metrics{padding:10px;gap:10px}
+.offer-slide .metrics dt{font-size:8px}
+.offer-slide .metrics dd{font-size:18px}
+.offer-slide .funding-split{padding:8px!important;margin-top:9px!important}
+.offer-slide .funding-split strong{font-size:11px}
+.offer-slide .funding-split .funding-impact{font-size:9px!important}
+@media(max-width:350px){.financial-tile{padding:6px 0}.financial-pair dd{font-size:17px}.financial-slide p.financial-meaning{font-size:9px}.offer-slide .metrics .metric:last-child dd{font-size:11px}}
+@media(max-width:350px){.financial-heading h5{font-size:10px}.financial-pair dt{font-size:8px}.financial-pair dd{margin:3px 0}.financial-slide p.financial-meaning{margin:3px 0;line-height:1.3}.financial-slide p.financial-recent{font-size:8px}.financial-slide>h4{margin-bottom:7px}}
+.offer-slide .metrics{gap:8px 10px}.offer-slide .funding-split{margin-top:7px!important}
+.financial-tile{padding:6px 0}.financial-slide p.financial-meaning{font-size:9px;line-height:1.3;margin:3px 0}.financial-slide p.financial-recent{font-size:8px}
