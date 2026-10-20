@@ -86,10 +86,11 @@ function validateCatalogue(catalogue, schema) {
     if (ipo.composition && Math.abs(ipo.composition.freshPercent + ipo.composition.ofsPercent - 100) > 0.000001) fail(id, 'fresh issue and OFS must total 100%');
     if (ipo.offerTerms) {
       const t=ipo.offerTerms;
+      const fresh=t.freshAmountCr===null?(Number.isSafeInteger(t.freshShares)?t.freshShares*t.upperBand/10000000:NaN):t.freshAmountCr;
       const ofs=t.ofsAmountCr===null?t.ofsShares*t.upperBand/10000000:t.ofsAmountCr;
-      if(t.freshAmountCr===null||t.ofsAmountCr===null&&t.ofsShares===null||!Number.isFinite(ofs)||t.upperBand!==ipo.priceBand?.max||Math.abs(t.ceilingCr-t.freshAmountCr-ofs)>0.0000001)fail(id,'offer ceiling requires matching disclosed components and current upper band');
-      if(Math.abs(t.freshPercentAtCeiling+t.ofsPercentAtCeiling-100)>0.000001||t.ceilingCr<=0||Math.abs(t.freshPercentAtCeiling-t.freshAmountCr/t.ceilingCr*100)>0.000001)fail(id,'offer ceiling composition is inconsistent');
-      if(t.basis==='calculated_upper_band_ceiling'&&t.ofsAmountCr!==null||t.basis==='disclosed_aggregate_limits'&&t.ofsAmountCr===null)fail(id,'offer ceiling basis contradicts disclosed components');
+      if(!Number.isFinite(fresh)||t.ofsAmountCr===null&&t.ofsShares===null||!Number.isFinite(ofs)||t.upperBand!==ipo.priceBand?.max||Math.abs(t.ceilingCr-fresh-ofs)>0.0000001)fail(id,'offer ceiling requires matching disclosed components and current upper band');
+      if(Math.abs(t.freshPercentAtCeiling+t.ofsPercentAtCeiling-100)>0.000001||t.ceilingCr<=0||Math.abs(t.freshPercentAtCeiling-fresh/t.ceilingCr*100)>0.000001)fail(id,'offer ceiling composition is inconsistent');
+      if(t.basis==='calculated_upper_band_ceiling'&&t.ofsAmountCr!==null&&t.freshAmountCr!==null||t.basis==='disclosed_aggregate_limits'&&(t.ofsAmountCr===null||t.freshAmountCr===null))fail(id,'offer ceiling basis contradicts disclosed components');
     }
     const ordered = ['opensAt', 'closesAt', 'allotmentExpectedAt', 'listingExpectedAt'];
     const dates = ordered.map(k => ipo.timeline[k]).filter(v => v !== null);

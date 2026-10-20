@@ -495,6 +495,13 @@
               "finalProceeds": {
                 "type": "boolean",
                 "const": false
+              },
+              "freshShares": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0
               }
             },
             "additionalProperties": false,
