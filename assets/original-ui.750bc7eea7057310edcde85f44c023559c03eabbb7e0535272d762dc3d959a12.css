@@ -120,3 +120,21 @@
 .walkthrough-coach button:focus-visible{outline:3px solid #168465;outline-offset:2px}
 .walkthrough-coach [hidden],.walkthrough-spotlight[hidden]{display:none}
 @media(max-width:350px){.walkthrough-coach{padding:14px}.walkthrough-coach h2{font-size:20px}.walkthrough-coach .tour-copy{font-size:14px}.tour-actions{gap:5px}.tour-actions button{padding:8px}}
+/* Compact Finder: visible stage choices and an explicit escape to the full feed. */
+.finder-dialog{box-sizing:border-box;width:min(380px,calc(100% - 24px));padding:14px;border:1px solid var(--line);max-height:85dvh}
+.finder-heading h2{font-size:21px;margin:0}
+.finder-heading{margin-bottom:8px}
+.finder-dialog .discovery-controls{display:block}
+.finder-dialog .discovery-controls label{display:block;font-size:12px}
+.finder-dialog .discovery-controls [hidden],.finder-dialog .catalogue-info[hidden]{display:none!important}
+.finder-dialog #search{box-sizing:border-box;width:100%;margin-top:5px;font-size:16px;min-height:44px}
+.finder-stages{display:flex;flex-wrap:wrap;gap:5px;margin-top:12px}
+.finder-stages>span{flex-basis:100%;font-size:12px;font-weight:700;margin-bottom:2px}
+.finder-stages button{border:1px solid var(--line);border-radius:20px;background:var(--card);color:inherit;padding:6px 11px;min-height:36px;font:inherit;font-size:12px}
+.finder-stages button[aria-pressed=true]{color:#fff;background:#7050a4;border-color:#7050a4;font-weight:700}
+.finder-footer{display:flex;justify-content:space-between;gap:8px;margin-top:8px}
+.finder-footer button{font:inherit;font-size:12px;min-height:44px;padding:5px 8px;background:transparent;border:0;color:inherit}
+.finder-footer #finder-back{color:#7050a4;font-weight:700}
+.evidence-mode .finder-footer #finder-back{color:#d2b8ff}
+.finder-dialog .finder-results{margin-top:5px;border-radius:9px;font-size:14px}
+.finder-dialog .search-suggestions{max-height:150px;overflow:auto}
