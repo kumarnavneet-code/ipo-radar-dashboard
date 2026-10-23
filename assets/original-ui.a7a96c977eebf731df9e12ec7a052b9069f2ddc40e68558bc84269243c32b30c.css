@@ -110,7 +110,12 @@
 .walkthrough-coach{position:fixed;box-sizing:border-box;pointer-events:auto;background:#fff;color:#172c2b;border-radius:18px;padding:18px;box-shadow:0 12px 40px #0005;max-height:calc(100dvh - 24px);overflow:auto;font-family:inherit}
 .tour-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .tour-counter{font-size:11px;font-weight:750;letter-spacing:.06em;color:#6750ab}
-.walkthrough-coach .tour-exit{width:44px;height:44px;border:0;border-radius:50%;background:#f2f3f5;color:#344;font-size:26px;cursor:pointer}
+.walkthrough-coach .tour-exit{position:relative;display:grid;place-items:center;flex:0 0 44px;width:44px;height:44px;min-width:44px;min-height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:#6750ab;cursor:pointer;line-height:1;appearance:none}
+.walkthrough-coach .tour-exit:before{content:'';position:absolute;inset:4px;border:1px solid #e6e0f1;border-radius:50%;background:#f7f5fb;transition:background-color .15s,border-color .15s}
+.walkthrough-coach .tour-exit svg{position:relative;display:block;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;pointer-events:none}
+@media(hover:hover){.walkthrough-coach .tour-exit:hover:before{background:#eee8f8;border-color:#cec0e5}}
+.walkthrough-coach .tour-exit:active:before{background:#e5daf5;border-color:#b9a4db}
+.walkthrough-coach .tour-exit:focus-visible{outline-color:#6750ab}
 .walkthrough-coach h2{font-size:22px;line-height:1.2;margin:8px 0 12px;letter-spacing:-.02em}
 .walkthrough-coach .tour-copy{font-size:15px;line-height:1.5;margin:0 0 10px}
 .walkthrough-coach .tour-hint{font-size:12px;line-height:1.45;color:#536560;margin:0 0 16px}

@@ -12,7 +12,7 @@ function openAppWalkthrough(){
  const ring=document.createElement('div');ring.className='walkthrough-spotlight';ring.setAttribute('aria-hidden','true');root.append(ring);
  const panel=document.createElement('section');panel.className='walkthrough-coach';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','App walkthrough');
  const el=(tag,text,cls)=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;};
- const counter=el('span','','tour-counter'),exit=el('button','×','tour-exit');exit.type='button';exit.setAttribute('aria-label','Exit walkthrough');exit.onclick=close;
+ const counter=el('span','','tour-counter'),exit=el('button','','tour-exit');exit.type='button';exit.setAttribute('aria-label','Exit walkthrough');exit.title='Exit walkthrough';const closeIcon=document.createElementNS('http://www.w3.org/2000/svg','svg');closeIcon.setAttribute('viewBox','0 0 24 24');closeIcon.setAttribute('aria-hidden','true');closeIcon.setAttribute('focusable','false');const closePath=document.createElementNS('http://www.w3.org/2000/svg','path');closePath.setAttribute('d','m6 6 12 12M18 6 6 18');closeIcon.append(closePath);exit.append(closeIcon);exit.onclick=close;
  const top=el('div','','tour-top');top.append(counter,exit);
  const title=el('h2','');title.tabIndex=-1;
  const text=el('p','','tour-copy'),hint=el('p','','tour-hint');
