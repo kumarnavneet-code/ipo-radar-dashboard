@@ -1,28 +1,83 @@
 const modules={};
-modules["src/components/app-walkthrough.js"]=(()=>{const steps=[
- ['Discover IPOs','Browse companies in Discover. Swipe a card horizontally, or choose a slide dot, to explore dates, offer figures and the business.','Discover → swipe to explore'],
- ['Find your next IPO','Tap Search and type part of a company name, then choose a suggestion. Use the circles above the feed to filter opening, closing, allotment and listing events in IST.','Search → type → select'],
- ['Keep a watchlist','Save an IPO from its feed card. Open My tracker or the My watchlist circle to see saved companies. Use View IPO to return to the full card.','Save → My tracker'],
- ['Track your application','Turn on Applied only if you applied. After a confirmed allotment publication, Check allotment opens the relevant registrar when its status link is available. Select the company there to check your application.','Applied → Check allotment'],
- ['Check the evidence','Turn on Facts & risks to inspect sources and research limitations. Expected dates can change. Missing data is labelled; a published allotment does not mean you received shares.','Facts & risks → sources'],
- ['Make it yours','Watchlists, Applied markers and personal comments stay in this browser on this device. Share app sends the app link. Replay this guide anytime using the rightmost App walkthrough circle.','Ready to explore']
-];
+modules["src/components/app-walkthrough.js"]=(()=>{// Contextual tour: actual controls stay usable; saving is always an explicit user action.
 function openAppWalkthrough(){
- if(document.querySelector('.walkthrough-dialog'))return;
- const trigger=document.activeElement;
- const dialog=document.createElement('dialog');dialog.className='walkthrough-dialog';dialog.setAttribute('aria-labelledby','walkthrough-title');
- const progress=document.createElement('p');progress.className='walkthrough-progress';
- const title=document.createElement('h2');title.id='walkthrough-title';title.tabIndex=-1;
- const copy=document.createElement('p'),route=document.createElement('p');route.className='walkthrough-route';
- const content=document.createElement('div');content.setAttribute('aria-live','polite');content.append(progress,title,copy,route);
- const actions=document.createElement('div');actions.className='walkthrough-actions';
- const make=(text,action)=>{const b=document.createElement('button');b.type='button';b.textContent=text;b.onclick=action;return b;};
- let step=0;
- const close=make('Close guide',()=>dialog.close()),back=make('Back',()=>{step--;render();}),next=make('Next',()=>{if(step===steps.length-1)dialog.close();else{step++;render();}});
- actions.append(close,back,next);dialog.append(content,actions);document.body.append(dialog);
- function render(){progress.textContent=`APP WALKTHROUGH · ${step+1} of ${steps.length}`;[title.textContent,copy.textContent,route.textContent]=steps[step];back.disabled=step===0;next.textContent=step===steps.length-1?'Done':'Next';title.focus({preventScroll:true});}
- dialog.addEventListener('close',()=>{dialog.remove();if(trigger?.isConnected)trigger.focus({preventScroll:true});});
- dialog.showModal();render();
+ if(document.querySelector('.walkthrough-coach'))return;
+ const $=s=>document.querySelector(s),trigger=document.activeElement;
+ const originalView=$('#records-section').hidden?'feed':'records',scroll=$('#main').scrollTop;
+ const evidenceWasOn=$('#evidence-toggle').getAttribute('aria-pressed')==='true';
+ const originalStory=document.querySelector('.story[aria-pressed="true"]')?.id;
+ const savedQuery=$('#search').value,savedStage=$('#lifecycle-filter').value;
+ const root=document.createElement('div');root.className='walkthrough-layer';
+ const shades=Array.from({length:4},()=>{const n=document.createElement('div');n.className='walkthrough-shade';root.append(n);return n;});
+ const ring=document.createElement('div');ring.className='walkthrough-spotlight';ring.setAttribute('aria-hidden','true');root.append(ring);
+ const panel=document.createElement('section');panel.className='walkthrough-coach';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','App walkthrough');
+ const el=(tag,text,cls)=>{const n=document.createElement(tag);n.textContent=text;if(cls)n.className=cls;return n;};
+ const counter=el('span','','tour-counter'),exit=el('button','×','tour-exit');exit.type='button';exit.setAttribute('aria-label','Exit walkthrough');exit.onclick=close;
+ const top=el('div','','tour-top');top.append(counter,exit);
+ const title=el('h2','');title.tabIndex=-1;
+ const text=el('p','','tour-copy'),hint=el('p','','tour-hint');
+ const actions=el('div','','tour-actions'),back=el('button','Back'),skip=el('button','Next'),action=el('button','','tour-primary');
+ for(const b of [back,skip,action])b.type='button';actions.append(back,skip,action);panel.append(top,title,text,hint,actions);root.append(panel);document.body.append(root);
+ let index=0,target=null,removeAction=()=>{},closed=false;
+ const feed=()=>{$('#feed-nav').click();};
+ const firstCard=()=>[...document.querySelectorAll('#catalogue > li')].find(c=>!c.hidden);
+ const saveButton=()=>firstCard()?.querySelector('.save-button');
+ const steps=[
+  {title:'Let’s try IPO Radar',text:'A quick, hands-on tour. We’ll point to the real buttons as you go.',hint:'Try real controls • Skip any step',label:'Show me',prepare:()=>{},target:()=>null},
+  {title:'Start with these four dates',text:'Opening, closing, allotment and listing — all in Indian time. “est.” means the date may change.',hint:'These are the dates on a real IPO card.',label:'Next: explore the company',prepare:()=>{feed();$('#story-all').click();if($('#evidence-toggle').getAttribute('aria-pressed')==='true')$('#evidence-toggle').click();firstCard()?.querySelector('.carousel-dots button')?.click();},target:()=>firstCard()?.querySelector('.issue-dates')},
+  {title:'There’s more behind each card',text:'Swipe left on a card, or tap a dot, to see the business, finances and subscription figures.',hint:'Try the highlighted dot to open the next slide.',label:'Show next slide',prepare:feed,target:()=>firstCard()?.querySelectorAll('.carousel-dots button')[1],activate:()=>{target?.click();advance();},listen:true},
+  {title:'Want to follow this IPO?',text:'Tap the bookmark to add this company to My tracker. You can remove it anytime.',hint:'Optional: this saves the company in this browser.',label:'Save this IPO',prepare:feed,target:()=>saveButton()?.getAttribute('aria-pressed')==='true'?$('#records-nav'):saveButton(),activate:()=>{if(target?.getAttribute('aria-pressed')!=='true')target?.click();advance();},listen:true},
+  {title:'Your saved IPOs live here',text:'My tracker brings your saved companies together. “View IPO” takes you back to the full card.',hint:'No saved IPOs? Save a bookmark from Discover first.',label:'Next: Applied & allotment',prepare:()=>{$('#records-nav').click();},target:()=>$('.record-card')||$('#records-nav')},
+  {title:'Already applied through your broker?',text:'Switch on Applied for that IPO. When allotment is published, use Check allotment to open its registrar’s status page.',hint:'Only mark Applied if you really applied. This does not submit an application.',label:'Next: check the sources',prepare:()=>{$('#records-nav').click();},target:()=>$('.applied-toggle')||$('#records-nav')},
+  {title:'Look beyond the numbers',text:'Facts & risks shows the sources and research limitations. Tap the highlighted switch to take a look.',hint:'Missing information is labelled. An expected date is not a confirmed result.',label:'Show facts & risks',prepare:feed,target:()=>$('#evidence-toggle'),activate:()=>{if(target?.getAttribute('aria-pressed')!=='true')target?.click();advance();},listen:true},
+  {title:'You’re ready. Find a company?',text:'Tap Search, type a few letters, then pick a company from the suggestions. The circles above the feed help you filter IPOs by stage.',hint:'Your watchlist stays on this device. Replay this tour from App walkthrough anytime.',label:'Try Search',prepare:feed,target:()=>$('#search-nav'),activate:()=>{close(false);$('#search-nav').click();}}
+ ];
+ function advance(){if(index<steps.length-1){index++;render();}else close();}
+ back.onclick=()=>{index--;render();};skip.onclick=advance;
+ function position(){
+  if(closed)return;
+  const w=innerWidth,h=innerHeight;let r=target?.getBoundingClientRect();
+  if(!r||r.width===0||r.height===0||r.bottom<0||r.top>h)r=null;
+  ring.hidden=!r;
+  const left=r?Math.max(4,r.left-6):0,right=r?Math.min(w-4,r.right+6):w,topY=r?Math.max(4,r.top-6):h,bottom=r?Math.min(h-4,r.bottom+6):h;
+  const rect=(n,x,y,width,height)=>Object.assign(n.style,{left:x+'px',top:y+'px',width:Math.max(0,width)+'px',height:Math.max(0,height)+'px'});
+  if(r){rect(ring,left,topY,right-left,bottom-topY);rect(shades[0],0,0,w,topY);rect(shades[1],0,bottom,w,h-bottom);rect(shades[2],0,topY,left,bottom-topY);rect(shades[3],right,topY,w-right,bottom-topY);}else{rect(shades[0],0,0,w,h);for(const n of shades.slice(1))rect(n,0,0,0,0);}
+  const device=$('.device-mockup').getBoundingClientRect();
+  panel.style.width=Math.min(370,w-24,device.width-24)+'px';panel.style.left=Math.max(12,Math.min(w-panel.offsetWidth-12,device.left+(device.width-panel.offsetWidth)/2))+'px';
+  const ph=panel.offsetHeight;
+  let y=!r?(h-ph)/2:topY>h-bottom?topY-ph-16:bottom+16;
+  panel.style.top=Math.max(12,Math.min(h-ph-12,y))+'px';
+ }
+ function render(){
+  removeAction();const s=steps[index];s.prepare();target=s.target();
+  // Ensure a card control remains visible inside the app's independently scrolling feed.
+  if(target&&$('#main').contains(target))target.scrollIntoView({block:'center',behavior:'instant'});
+  counter.textContent=index===0?'QUICK START':`${index} / ${steps.length-1}`;
+  title.textContent=s.title;text.textContent=s.text;hint.textContent=s.hint;
+  if(index>0&&!target){text.textContent='There are no IPOs available in this feed right now. You can still learn where to find your watchlist, sources and search.';hint.textContent='Continue the tour, or exit and try again after the feed updates.';}
+  if(index===4&&$('.record-card'))hint.textContent='These are your saved companies. Your bookmarks stay on this device.';
+  const alreadySaved=index===3&&saveButton()?.getAttribute('aria-pressed')==='true';
+  if(alreadySaved){text.textContent='This company is already in your watchlist. Let’s see where to find it.';hint.textContent='Your existing bookmark stays saved.';}
+  back.hidden=index===0;skip.hidden=index===0;skip.textContent=index===steps.length-1?'Finish':'Skip';
+  action.textContent=index>0&&!target?'Continue':alreadySaved?'Open My tracker':s.label;
+  action.onclick=()=>{if(s.activate&&target)s.activate();else advance();};
+  if(s.listen&&target){const handler=()=>queueMicrotask(()=>{if(closed||steps[index]!==s)return;if(index===6){removeAction();target=firstCard()?.querySelector('.research-sources summary');target?.scrollIntoView({block:'center',behavior:'instant'});title.textContent='See where the figures come from';text.textContent='Tap Sources & observation dates to see the evidence behind this IPO. You can also open the company and offer documents here.';hint.textContent='Take a look, then continue when you’re ready.';action.textContent='Next: find a company';action.onclick=advance;position();title.focus({preventScroll:true});}else advance();});target.addEventListener('click',handler);removeAction=()=>target?.removeEventListener('click',handler);}else removeAction=()=>{};
+  // A single primary action avoids accidental double advances from the highlighted control.
+  if(index===steps.length-1&&target){const searchTarget=target;const finish=()=>close(false);searchTarget.addEventListener('click',finish,true);removeAction=()=>searchTarget.removeEventListener('click',finish,true);}
+  if(s.listen&&target)action.onclick=()=>{if(alreadySaved)advance();else target.click();};
+  position();title.focus({preventScroll:true});requestAnimationFrame(position);
+ }
+ function onKey(e){if(e.key==='Escape'){e.preventDefault();close();}if(e.key==='Tab'){
+  const controls=[...(target?.matches('button,a,input')?[target]:[]),...panel.querySelectorAll('button')].filter(n=>!n.hidden&&!n.disabled);
+  const at=controls.indexOf(document.activeElement);e.preventDefault();controls[at<0?(e.shiftKey?controls.length-1:0):(at+(e.shiftKey?-1:1)+controls.length)%controls.length]?.focus();
+ }}
+ function close(restore=true){if(closed)return;closed=true;removeAction();root.remove();document.removeEventListener('keydown',onKey,true);window.removeEventListener('resize',position);document.removeEventListener('scroll',position,true);
+  if(($('#evidence-toggle').getAttribute('aria-pressed')==='true')!==evidenceWasOn)$('#evidence-toggle').click();
+  if(originalStory)document.getElementById(originalStory)?.click();
+  $('#search').value=savedQuery;$('#lifecycle-filter').value=savedStage;$('#search').dispatchEvent(new Event('input',{bubbles:true}));
+  if(restore){$(originalView==='feed'?'#feed-nav':'#records-nav').click();$('#main').scrollTop=scroll;if(trigger?.isConnected)trigger.focus({preventScroll:true});}
+ }
+ document.addEventListener('keydown',onKey,true);window.addEventListener('resize',position);document.addEventListener('scroll',position,true);render();
 }
 
 return {openAppWalkthrough};})();
@@ -803,8 +858,8 @@ try {
   function describeConnection(result){$('#engine-preview-notice').textContent=result.message;$('#dataset-badge').textContent=result.state==='stale'?'CONNECTED · STALE':'CONNECTED FEED';$('#dataset-description').textContent='Official-source discovery · Partial research coverage';$('#reference-clock').textContent=result.message;for(const card of cards.values())card.setFreshness(result.health,clock());}
   describeConnection(initial);announce('Connected feed loaded: '+catalogue.ipos.length+' IPOs from available official sources.');
   async function refreshFeed(){const result=await connected.poll();if(result.changed&&result.catalogue){const anchor=[...cards.values()].find(card=>!card.hidden&&card.getBoundingClientRect().bottom>$('#main').getBoundingClientRect().top);const anchorId=anchor?.id,top=anchor?.getBoundingClientRect().top;Object.assign(catalogue,result.catalogue);renderCards();suggestions.update(catalogue.ipos);recordsPanel.refresh();refreshSaved();filter();const replacement=anchorId&&document.getElementById(anchorId);if(replacement)$('#main').scrollBy(0,replacement.getBoundingClientRect().top-top);announce('Connected feed updated: '+catalogue.ipos.length+' IPOs.');}describeConnection(result);}
-  setInterval(()=>{if(!document.hidden&&!finder.open&&!document.querySelector('dialog[open]'))refreshFeed();},60000);
-  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!document.querySelector('dialog[open]'))refreshFeed();});
+  setInterval(()=>{if(!document.hidden&&!finder.open&&!document.querySelector('dialog[open],.walkthrough-coach'))refreshFeed();},60000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!document.querySelector('dialog[open],.walkthrough-coach'))refreshFeed();});
  }
  if(catalogue.mode!=='demo')setInterval(()=>{for(const card of cards.values())card.updateLifecycle(clock());filter();},60000);
 } catch(error) {status.textContent='The app could not load. '+error.message+' Restart the local preview and reload.';status.classList.add('warning');const retry=document.createElement('button');retry.type='button';retry.textContent='Retry feed connection';retry.onclick=()=>location.reload();status.append(' ',retry);}

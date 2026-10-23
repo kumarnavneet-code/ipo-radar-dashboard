@@ -99,18 +99,24 @@
 .records-panel .record-actions{gap:6px;align-items:center}
 .records-panel .record-actions button{padding:0 8px;min-height:32px;font-size:11px;border-radius:6px}
 .walkthrough-face{background:#e5f3ff;color:#1664b1}
-.walkthrough-dialog{box-sizing:border-box;width:min(420px,calc(100% - 32px));max-height:85dvh;overflow:auto;border:1px solid #dce2dd;border-radius:20px;padding:24px;color:#172c2b;background:#fff;box-shadow:0 20px 60px #0004}
-.walkthrough-dialog::backdrop{background:#101b28b3}
-.walkthrough-progress{font-size:11px;letter-spacing:.06em;color:#6750ab;font-weight:700}
-.walkthrough-dialog h2{font-size:24px;line-height:1.2;margin:18px 0 12px}
-.walkthrough-dialog p{line-height:1.6}
-.walkthrough-route{padding:12px;border-radius:10px;background:#f2effa;font-size:13px;font-weight:650}
-.walkthrough-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
-.walkthrough-actions button{min-height:44px;padding:8px 14px;border:1px solid #a9b8b2;border-radius:9px;background:white;color:#172c2b;font:inherit;cursor:pointer}
-.walkthrough-actions button:last-child{background:#6750ab;color:white;border-color:#6750ab;margin-left:auto}
-.walkthrough-actions button:disabled{opacity:.45;cursor:default}
-.walkthrough-actions button:focus-visible{outline:3px solid #166c58;outline-offset:3px}
 @media(pointer:coarse){.records-panel .applied-toggle,.records-panel .record-actions button,.records-panel .allotment-status a{min-height:36px}}
 .record-footer{display:flex;align-items:center;flex-wrap:wrap;gap:2px 6px}
 .records-panel .record-footer .allotment-status{flex:1;min-width:170px;margin:0}
 .records-panel .record-footer .record-actions{margin-left:auto;flex:none}
+/* Contextual quick start. Four shields leave the real highlighted control usable. */
+.walkthrough-layer{position:fixed;inset:0;z-index:10000;pointer-events:none}
+.walkthrough-shade{position:fixed;background:#101827ab;pointer-events:auto}
+.walkthrough-spotlight{position:fixed;box-sizing:border-box;border:3px solid #a88cff;border-radius:12px;box-shadow:0 0 0 3px #fff,0 0 24px #a88cff88;pointer-events:none}
+.walkthrough-coach{position:fixed;box-sizing:border-box;pointer-events:auto;background:#fff;color:#172c2b;border-radius:18px;padding:18px;box-shadow:0 12px 40px #0005;max-height:calc(100dvh - 24px);overflow:auto;font-family:inherit}
+.tour-top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.tour-counter{font-size:11px;font-weight:750;letter-spacing:.06em;color:#6750ab}
+.walkthrough-coach .tour-exit{width:44px;height:44px;border:0;border-radius:50%;background:#f2f3f5;color:#344;font-size:26px;cursor:pointer}
+.walkthrough-coach h2{font-size:22px;line-height:1.2;margin:8px 0 12px;letter-spacing:-.02em}
+.walkthrough-coach .tour-copy{font-size:15px;line-height:1.5;margin:0 0 10px}
+.walkthrough-coach .tour-hint{font-size:12px;line-height:1.45;color:#536560;margin:0 0 16px}
+.tour-actions{display:flex;gap:8px;flex-wrap:wrap}
+.tour-actions button{min-height:44px;padding:8px 12px;font:inherit;font-size:13px;cursor:pointer;border:1px solid #d4ded9;border-radius:9px;background:white;color:#344}
+.tour-actions .tour-primary{background:#6750ab;border-color:#6750ab;color:white;font-weight:700;flex:1}
+.walkthrough-coach button:focus-visible{outline:3px solid #168465;outline-offset:2px}
+.walkthrough-coach [hidden],.walkthrough-spotlight[hidden]{display:none}
+@media(max-width:350px){.walkthrough-coach{padding:14px}.walkthrough-coach h2{font-size:20px}.walkthrough-coach .tour-copy{font-size:14px}.tour-actions{gap:5px}.tour-actions button{padding:8px}}
