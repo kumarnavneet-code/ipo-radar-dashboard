@@ -84,3 +84,33 @@
 @media(max-width:350px){.financial-heading h5{font-size:10px}.financial-pair dt{font-size:8px}.financial-pair dd{margin:3px 0}.financial-slide p.financial-meaning{margin:3px 0;line-height:1.3}.financial-slide p.financial-recent{font-size:8px}.financial-slide>h4{margin-bottom:7px}}
 .offer-slide .metrics{gap:8px 10px}.offer-slide .funding-split{margin-top:7px!important}
 .financial-tile{padding:6px 0}.financial-slide p.financial-meaning{font-size:9px;line-height:1.3;margin:3px 0}.financial-slide p.financial-recent{font-size:8px}
+/* Dense watchlist: title + small switch, status, then actions. */
+.records-panel .record-card{padding:8px 10px;margin:6px 0;border-radius:12px}
+.record-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.record-heading h4{margin:0;font-size:13px;line-height:1.3;flex:1;min-width:0}
+.records-panel .applied-toggle{position:relative;flex:none;gap:6px;margin:0;min-height:36px;font-size:11px;border:0;background:transparent}
+.records-panel .applied-toggle::before{width:28px;height:16px}
+.records-panel .applied-toggle::after{width:12px;height:12px;left:0;transform:translateX(2px)}
+.records-panel .applied-toggle[aria-checked=true]::after{transform:translateX(14px)}
+.records-panel .allotment-status{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:0 8px;padding:0 6px;margin:2px 0;border-radius:6px;min-height:28px}
+.records-panel .allotment-status strong{font-size:10px;font-weight:600}
+.records-panel .allotment-status a{display:inline-flex;align-items:center;min-height:32px;margin:0;font-size:11px}
+.records-panel .allotment-status p{margin:2px 0;font-size:10px}
+.records-panel .record-actions{gap:6px;align-items:center}
+.records-panel .record-actions button{padding:0 8px;min-height:32px;font-size:11px;border-radius:6px}
+.walkthrough-face{background:#e5f3ff;color:#1664b1}
+.walkthrough-dialog{box-sizing:border-box;width:min(420px,calc(100% - 32px));max-height:85dvh;overflow:auto;border:1px solid #dce2dd;border-radius:20px;padding:24px;color:#172c2b;background:#fff;box-shadow:0 20px 60px #0004}
+.walkthrough-dialog::backdrop{background:#101b28b3}
+.walkthrough-progress{font-size:11px;letter-spacing:.06em;color:#6750ab;font-weight:700}
+.walkthrough-dialog h2{font-size:24px;line-height:1.2;margin:18px 0 12px}
+.walkthrough-dialog p{line-height:1.6}
+.walkthrough-route{padding:12px;border-radius:10px;background:#f2effa;font-size:13px;font-weight:650}
+.walkthrough-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.walkthrough-actions button{min-height:44px;padding:8px 14px;border:1px solid #a9b8b2;border-radius:9px;background:white;color:#172c2b;font:inherit;cursor:pointer}
+.walkthrough-actions button:last-child{background:#6750ab;color:white;border-color:#6750ab;margin-left:auto}
+.walkthrough-actions button:disabled{opacity:.45;cursor:default}
+.walkthrough-actions button:focus-visible{outline:3px solid #166c58;outline-offset:3px}
+@media(pointer:coarse){.records-panel .applied-toggle,.records-panel .record-actions button,.records-panel .allotment-status a{min-height:36px}}
+.record-footer{display:flex;align-items:center;flex-wrap:wrap;gap:2px 6px}
+.records-panel .record-footer .allotment-status{flex:1;min-width:170px;margin:0}
+.records-panel .record-footer .record-actions{margin-left:auto;flex:none}
